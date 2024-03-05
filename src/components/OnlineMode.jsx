@@ -5,71 +5,78 @@ import { useNavigate } from 'react-router-dom';
 const OnlineMode = () => {
     const navigation = useNavigate();
     const [formData, setFormData] = useState({
-      name: '',
-      email: '',
-      phone: '',
-      password: '',
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
     });
 
+
     useEffect(() => {
-      const authToken = localStorage.getItem('authToken');
-      if (authToken) {
-        navigation('/');
-      }
+
+        const offlineData = JSON.parse(localStorage.getItem('offlineData') || '[]');
+        if (offlineData.length > 0 && navigator.onLine) {
+
+            axios.post('http://localhost:5590/syncOfflineData', offlineData)
+                .then(response => {
+                    console.log(response.data);
+                    localStorage.removeItem('offlineData');
+                })
+                .catch(error => {
+                    console.error('Error syncing offline data:', error.message);
+                });
+        }
     }, [navigation]);
 
     const handleChange = (e) => {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
+        e.preventDefault();
 
-      try {
-        const response = await axios.post('https://zerkobackend.onrender.com/register', formData);
-        console.log(response.data);
-        
-        const offlineData = JSON.parse(localStorage.getItem('offlineData') || '[]');
-        localStorage.setItem('offlineData', JSON.stringify([...offlineData, formData]));
-        alert('Registration successful');
-        navigation('/');
-      }  catch (error) {
-        if(error.response.status === 400) {
-          alert('email or phone number already registered');
+        try {
+            const response = await axios.post('http://localhost:5590/register', formData);
+            console.log(response.data);
+            alert('Registration successful');
+            navigation('/');
+        } catch (error) {
+
+            console.error('Registration failed:', error.response ? error.response.data : error.message);
         }
-       
-        console.error('Registration failed:', error.response ? error.response.data : error.message);
-        alert('Registration failed');
-      }
-    };
+    }
 
     return (
-      <>
-        <h2>User Registration Form</h2>
-        <div className='login'>
-          <form className="container" onSubmit={handleSubmit}>
-            <h2>Online SignUp</h2>
-            <label>
-              Name:
-              <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-            </label>
-            <label>
-              Email:
-              <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-            </label>
-            <label>
-              Phone:
-              <input type="phone" name="phone" value={formData.phone} onChange={handleChange} required />
-            </label>
-            <label>
-              Password:
-              <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-            </label>
-            <button type="submit">Register</button>
-            <p>If you have an account? <a href="/">Login here</a>.</p>
-          </form>
-        </div>
-      </>
+        <>
+            <h2>User Registration Form</h2>
+            <div className='login online-mode'>
+                <form className="container" onSubmit={handleSubmit}>
+                    <h2>Online SignUp</h2>
+                    <label>
+                        Name:
+                        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+
+                    </label>
+                    <label>
+                        Email:
+                        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+
+                    </label>
+                    <label>
+                        Phone:
+                        <input type="phone" name="phone" value={formData.phone} onChange={handleChange} required />
+
+                    </label>
+                    <label>
+                        Password:
+                        <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+                    </label>
+                    <button type="submit">Register</button>
+                    
+                </form>
+            </div>
+        </>
     );
 };
 

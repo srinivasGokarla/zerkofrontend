@@ -1,5 +1,4 @@
 
-
 .App {
   font-family: Arial, sans-serif;
   max-width: 800px;
@@ -7,53 +6,9 @@
   padding: 20px;
 }
 
-h1 {
+h2 {
   text-align: center;
   margin-bottom: 20px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #ccc;
-}
-
-th, td {
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  text-align: left;
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-tr:hover {
-  background-color: #e0e0e0;
-}
-
-
-
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  margin: auto;
-  align-items: center;
-  text-align: center;
-}
-
-
-header {
-  background-color: #333;
-  color: white;
-  padding: 1rem;
-  text-align: center;
 }
 
 .container {
@@ -94,23 +49,22 @@ button {
   margin: 20px;
 }
 
-.grid {
- text-align: center;
- text-wrap:wrap
-}
-
-button.logout {
-  background-color: #d9534f;
-}
 .login {
   display: flex;
   align-items: center;
   justify-content: center;
-  
 }
-.token {
-  width: 60%;
-  display: flex;
-  justify-content: center;
-  margin: auto;
+.online-mode h2 {
+  color: #007bff; 
+}
+
+.online-mode button[type="submit"] {
+  background-color: #007bff; 
+}
+.offline-mode h2 {
+  color: #dc3545; 
+}
+
+.offline-mode button[type="submit"] {
+  background-color: #dc3545; 
 }
